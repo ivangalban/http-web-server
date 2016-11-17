@@ -16,7 +16,7 @@ Serving directory "/home/pqr"
 
 2. Debe velar en todo momento que los clientes no puedan listar ninguna información que se encuentre fuera del directorio raiz que se especifica en la entrada.
 
-3. Este servidor web debe mostrar la información de un directorio creando una página web html con el contenido. Vea el fichero [directory.html] para que vea un ejemplo de como debe ser este archivo.
+3. Este servidor web debe mostrar la información de un directorio creando una página web html con el contenido. Vea el fichero [directory.html](directory.html) para que vea un ejemplo de como debe ser este archivo.
 
 4. No es objetivo de este proyecto que el servidor implemente con lujo de detalle el protocolo http. Pero es necesario que sea capaz de entender las peticiones que recibirá de los navegadores web más comunes (Chrome, Firefox, etc.).
 
