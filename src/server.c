@@ -54,6 +54,36 @@ void add_client(int connfd, pool *p)
 }
 
 
+void download(pool *p,int i)
+{
+    size_t count;
+    off_t remaining = p->ssize[i] - p->off_set[i];
+
+    if (remaining > DOWNLOAD_BUFFER)
+        count = DOWNLOAD_BUFFER;
+    else
+        count = remaining;
+
+    socklen_t clientlen = sizeof(struct sockaddr_in);
+    struct sockaddr_in clientaddr;
+
+    int err = getpeername(p->clientfd[i], (SA *)&clientaddr, &clientlen);
+    if(!err)
+        sendfile (p->clientfd[i], p->open_writer_fds[i], &p->off_set[i], count);
+
+    if(err || (p->off_set[i] >= p->ssize[i]))
+    {
+        printf("2\n");
+        p->ssize[i] = 0;
+        p->off_set[i] = 0;
+        close(p->clientfd[i]);
+        close(p->open_writer_fds[i]);
+        p->open_writer_fds[i] = -1;
+        p->clientfd[i] = -1;
+    }
+    return;
+}
+
 void check_clients(pool *p) 
 {
 	 
@@ -70,11 +100,9 @@ void check_clients(pool *p)
 			p->nready--;
 		
 		    int bytes_read = recv(connfd, buf, sizeof(buf), 0); 
-			if (bytes_read < 0) error_msg("Problem with recv call", 0);
-
-
+			if (bytes_read < 0)
+				error_msg("Problem with recv call", 0);
 			response(buf, connfd, p, i);
-			
 			break;
 		}
 	}
