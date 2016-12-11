@@ -16,7 +16,7 @@ void server_error(int connfd, char *num, char *msg, char *cause, char *text)
     return;
 }
 
-void error_msg(const char* msg, int halt_flag) {
+void error_msg(const char *msg, int halt_flag) {
     perror(msg);
     if (halt_flag) exit(-1); 
 }

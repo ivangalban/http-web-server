@@ -3,6 +3,7 @@
 #define MAXPORT 65535
 #define	MAXLINE	 8192  /* max text line length */
 #define DOWNLOAD_BUFFER 8192
+#define append(t) (t)+(strlen(t)) 
 
 typedef struct 
 { 
