@@ -22,6 +22,20 @@ typedef struct
 } pool;
 
 
+typedef struct{
+
+	char *name;
+	int size_byte;
+	char *type;
+	char *lst_mdf;
+	int end;
+	int dir;
+	time_t date;
+
+}cfile;
+
+enum {NAME, SIZE, TYPE, DATE};
+
 
 void init_pool(int listenfd, pool *p);
 void add_client(int, pool *);
