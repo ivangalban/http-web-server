@@ -72,7 +72,6 @@ void add_client(int connfd, pool *p)
 		unix_error("add_client error: Too many clients");
 }
 
-
 string b[100000];
 void merging(string a[] ,int low, int mid, int high, int (*cmp)(string, string)) {
    //string b[high-low+1];
@@ -243,7 +242,6 @@ void download(pool *p,int i)
 
     if(err || (p->off_set[i] >= p->ssize[i]))
     {
-        printf("2\n");
         p->ssize[i] = 0;
         p->off_set[i] = 0;
         close(p->clientfd[i]);
@@ -430,7 +428,6 @@ void add_download(int connfd ,pool *p,char *path, long long size, int index)
 	char array[100];
 	sprintf(array, "HTTP/1.1 200 OK");
 	sprintf(append(array), "Content-Length: %lld\n\n", size);
-	printf("%d\n",1);
     FD_CLR(connfd, &p->read_set);
 
 	p->off_set[index] = 0;

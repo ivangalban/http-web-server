@@ -14,12 +14,12 @@ typedef struct
 
     int nready;        
     int maxi;         
-
-    int clientfd[FD_SETSIZE];    
+    int clientfd[FD_SETSIZE];
+    int open_writer_fds[FD_SETSIZE];
    
    	ull ssize[FD_SETSIZE];
     off_t off_set[FD_SETSIZE];
-   	int open_writer_fds[FD_SETSIZE];
+    	
 } pool;
 
 
@@ -41,7 +41,7 @@ typedef struct{
 
 enum {NAME, SIZE, TYPE, DATE};
 
-
+int main(int, char **);
 void init_pool(int listenfd, pool *p);
 void add_client(int, pool *);
 void check_clients(pool *);

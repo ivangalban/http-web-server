@@ -22,12 +22,10 @@
 #include <dirent.h>
 #include <time.h>
 
+#define LISTENQ  1024  /* second argument to listen() */
+
 typedef struct sockaddr SA;
 typedef unsigned long long ull;
-
-
-
-#define LISTENQ  1024  /* second argument to listen() */
 
 
 /* $end open_client_read_fd */
