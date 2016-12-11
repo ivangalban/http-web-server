@@ -119,6 +119,19 @@ void translate(char uri[])
 }
 
 
+int check_back(string a, string b)
+{
+	if(strcmp(a.text, ".") == 0)
+		return -1;
+	if(strcmp(b.text, ".") == 0)
+		return 1;
+	if(strcmp(a.text, "..") == 0)
+		return -1;
+	if(strcmp(b.text, "..") == 0)
+		return 1;
+	return 0;
+}
+
 int cmp_size (string a, string b)
 {
 	int chbk = check_back(a, b);
