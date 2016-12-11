@@ -46,3 +46,4 @@ void response(char [], int, pool *, int);
 void translate(char []);
 int cmp_type (string, string);
 int cmp_name (string, string);
+int cmp_date (string, string);

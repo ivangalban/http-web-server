@@ -145,6 +145,25 @@ int cmp_name (string a, string b)
     return strcmp(a.text, b.text) * Order;
 }
 
+int cmp_date (string a, string b)
+{
+	int chbk = check_back(a, b);
+	if(chbk != 0)
+		return chbk;
+
+	struct stat stA, stB;
+	build2(a, b, &stA, &stB);
+
+	double seconds = difftime(stA.st_mtime, stB.st_mtime);
+
+    if(seconds < 0)
+    	return -1 * Order;
+    if(seconds > 0)
+    	return 1 * Order;
+
+    return strcmp(a.text, b.text) * Order;
+}
+
 
 void response(char request[], int connfd, pool *p, int index)
 {
