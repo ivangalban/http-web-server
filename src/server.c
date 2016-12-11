@@ -118,6 +118,23 @@ void translate(char uri[])
 	uri[j]=0;
 }
 
+
+typedef struct{
+
+	char *name;
+	int size_byte;
+	char *type;
+	char *lst_mdf;
+	int end;
+	int dir;
+	time_t date;
+
+}cfile;
+
+enum {NAME, SIZE, TYPE, DATE};
+
+
+
 void response(char request[], int connfd, pool *p, int index)
 {
 	struct stat sb;
