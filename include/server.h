@@ -27,3 +27,5 @@ void init_pool(int listenfd, pool *p);
 void add_client(int, pool *);
 void check_clients(pool *);
 void download(pool *, int);
+void error_msg(const char *, int);
+void response(char [], int, pool *, int);

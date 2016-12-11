@@ -4,6 +4,10 @@
 char *default_path;
 
 
+void error_msg(const char* msg, int halt_flag) {
+    perror(msg);
+    if (halt_flag) exit(-1); 
+}
 
 void init_pool(int listenfd, pool *p)
 {
@@ -69,7 +73,7 @@ void download(pool *p,int i)
 
     int err = getpeername(p->clientfd[i], (SA *)&clientaddr, &clientlen);
     if(!err)
-        sendfile (p->clientfd[i], p->open_writer_fds[i], &p->off_set[i], count);
+        sendfile(p->clientfd[i], p->open_writer_fds[i], &p->off_set[i], count);
 
     if(err || (p->off_set[i] >= p->ssize[i]))
     {
@@ -83,6 +87,52 @@ void download(pool *p,int i)
     }
     return;
 }
+
+
+void response(char request[], int connfd, pool *p, int index)
+{
+	struct stat sb;
+
+    char  uri[MAXLINE];
+	sscanf(request, "%s %s", uri, uri);
+	translate(uri);
+				
+	char tmp_path[1024];
+	strcpy(tmp_path, default_path);
+	strcat(tmp_path, uri);
+
+	if(stat(tmp_path, &sb) == -1){
+
+		server_error(connfd, "404", "not found", tmp_path, "Webserver could not find this path");
+		close(connfd);
+		FD_CLR(connfd, &p->read_set); 
+		p->clientfd[index] = -1;          
+		return;
+	}
+
+	int cmp_cmd = NAME;
+	if(strstr(query, "type"))				cmp_cmd = TYPE;
+	else if(strstr(query, "size"))			cmp_cmd = SIZE;
+	else if(strstr(query, "lastmodified"))	cmp_cmd = DATE;
+ 	
+	switch (sb.st_mode & S_IFMT)
+	{
+        case S_IFDIR:
+            html_content(uri, connfd, cmp_cmd, Order);
+            close(connfd);
+			FD_CLR(connfd, &p->read_set); 
+			p->clientfd[index] = -1;          
+		    break;
+
+        case S_IFREG:     
+        	add_download(connfd, p, tmp_path, (ull)sb.st_size, index);
+       	 	break;
+
+       	 default:
+       	 	break;
+    }
+}
+
 
 void check_clients(pool *p) 
 {
