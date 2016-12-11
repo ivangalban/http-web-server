@@ -56,3 +56,4 @@ int check_back(string, string);
 int get_extension(string, char *);
 void build1(string, struct stat *);
 void build2(string, string, struct stat *, struct stat *);
+void add_download(int, pool *, char *, long long, int);

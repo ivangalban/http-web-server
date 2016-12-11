@@ -262,6 +262,33 @@ int cmp_date (string a, string b)
 }
 
 
+void add_download(int connfd ,pool *p,char *path, long long size, int index)
+{
+	char array[100];
+	sprintf(array, "HTTP/1.1 200 OK");
+	sprintf(append(array), "Content-Length: %lld\n\n", size);
+	printf("%d\n",1);
+    FD_CLR(connfd, &p->read_set);
+
+	p->off_set[index] = 0;
+	p->ssize[index] = size;
+	p->open_writer_fds[index] = open(path, O_RDONLY, 0);
+	if(p->open_writer_fds[index] < 0)
+	{
+		server_error(connfd, "403", "forbidden", path, "Webserver could not read the file");
+		p->ssize[index] = 0;
+        p->off_set[index] = 0;
+        close(p->clientfd[index]);
+        close(p->open_writer_fds[index]);
+        p->open_writer_fds[index] = -1;
+        p->clientfd[index] = -1;
+		return;
+	}
+	
+	send(connfd, array, strlen(array), 0);
+
+}
+
 void response(char request[], int connfd, pool *p, int index)
 {
 	struct stat sb;
