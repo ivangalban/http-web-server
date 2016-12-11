@@ -41,5 +41,13 @@ int main(int argc, char **argv)
 		exit(0);
     }
 
+    listenfd = open_listenfd(port);
+
+    if(listenfd < 0)
+    {
+    	fprintf(stderr, "mounting error\n");
+		exit(0);
+    }
+
 	return 0;
 }
