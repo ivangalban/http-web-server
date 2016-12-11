@@ -2,6 +2,9 @@
 #include "../include/server.h"
 
 char *default_path;
+char global_path_name[MAXLINE];
+char query[100];
+int Order = 1;
 
 
 void server_error(int connfd, char *num, char *msg, char *cause, char *text)
@@ -70,6 +73,40 @@ void add_client(int connfd, pool *p)
 }
 
 
+string b[100000];
+void merging(string a[] ,int low, int mid, int high, int (*cmp)(string, string)) {
+   //string b[high-low+1];
+   int l1, l2, i;
+
+   for(l1 = low, l2 = mid + 1, i = low; l1 <= mid && l2 <= high; i++) {
+      if(cmp(a[l1], a[l2]) <= 0)
+         b[i] = a[l1++];
+      else
+         b[i] = a[l2++];
+   }
+   
+   while(l1 <= mid)    
+      b[i++] = a[l1++];
+
+   while(l2 <= high)   
+      b[i++] = a[l2++];
+
+   for(i = low; i <= high; i++)
+      a[i] = b[i];
+}
+
+void mergesort(string a[], int low, int high, int (*cmp)(string, string)) {
+   int mid;
+   
+   if(low < high) {
+      mid = (low + high) / 2;
+      mergesort(a, low, mid, cmp);
+      mergesort(a, mid+1, high, cmp);
+      merging(a, low, mid, high, cmp);
+   }
+}
+
+
 void html_content(char uri[], int connfd, int cmp_cmd, int order)
 {
 	char responsee[2000000];
@@ -97,7 +134,7 @@ void html_content(char uri[], int connfd, int cmp_cmd, int order)
 	for (int i = 0; i < n; ++i)
 		strcpy(t[i].text, namelist[i]->d_name);
 	
-	mysort(t, n, cmp);
+	mergesort(t, 0, n-1, cmp);
 
 
 	sprintf(responsee, "HTTP/1.1 200 OK");
@@ -217,9 +254,6 @@ void download(pool *p,int i)
     return;
 }
 
-
-char query[100];
-int Order = 1;
 void translate(char uri[])
 {
 	int j=0;
