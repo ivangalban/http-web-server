@@ -70,6 +70,123 @@ void add_client(int connfd, pool *p)
 }
 
 
+void html_content(char uri[], int connfd, int cmp_cmd, int order)
+{
+	char responsee[2000000];
+
+	char tmp_path[MAXLINE];
+	struct dirent **namelist;
+
+
+	strcpy(tmp_path, default_path);
+	strcat(tmp_path, uri);
+
+	int n = scandir(tmp_path, &namelist, NULL, alphasort);
+
+
+	strcpy(global_path_name, tmp_path);
+	int (*cmp)(string, string);
+	Order = order;
+
+	if(cmp_cmd == TYPE)			cmp = cmp_type;
+	else if(cmp_cmd == SIZE)	cmp = cmp_size;
+	else if(cmp_cmd == DATE)	cmp = cmp_date;
+	else						cmp = cmp_name;
+	
+	string t[n];
+	for (int i = 0; i < n; ++i)
+		strcpy(t[i].text, namelist[i]->d_name);
+	
+	mysort(t, n, cmp);
+
+
+	sprintf(responsee, "HTTP/1.1 200 OK");
+	sprintf(append(responsee), "Content-Type: text/html\n\n");
+	sprintf(append(responsee),"<html><head><title>%s</title></head>",tmp_path);
+	sprintf(append(responsee),"<body><h1>Content of directory \"%s\"</h1>",tmp_path);
+	
+
+	sprintf(append(responsee),"<table width = \"100%%\"><tr><th><a href=\"%s?q=filename\" title=\"Sort by Name\">Filename</a></th>", uri);
+	sprintf(append(responsee),"	<th> <a href=\"%s?q=size\" title=\"Sort by Size\">Size</a></th>", uri);
+	sprintf(append(responsee),"	<th> <a href=\"%s?q=type\" title=\"Sort by Type\">Type</a></th>", uri);
+	sprintf(append(responsee), "<th>Permission</th>");
+	sprintf(append(responsee),"	<th> <a href=\"%s?q=lastmodified\" title=\"Sort by Last Modified\">Last Modified</a></th>", uri);
+
+
+	for (int i = 0; i < n; ++i)
+	{
+
+		strcpy(tmp_path, uri);
+
+		char path_name[1000];
+
+		strcpy(path_name, default_path);
+
+		if(tmp_path[strlen(tmp_path)-1]!='/')
+			strcat(tmp_path,"/");
+
+		strcat(tmp_path, t[i].text);
+
+		strcat(path_name, tmp_path);
+
+		struct stat st;
+		stat(path_name, &st);
+
+		
+		sprintf(append(responsee),"<tr>");
+		
+		sprintf(append(responsee),"<td><a href=\"%s\">%s/</a></td>",tmp_path, t[i].text);
+
+		if((st.st_mode & S_IFMT) != S_IFDIR)
+		{
+		
+			sprintf(append(responsee),"<td align = \"center\">%lld</td>", st.st_size);
+		}
+		else
+		{
+			
+			char txt[] = "";
+			sprintf(append(responsee),"<td align = \"center\">%s</td>", txt);
+		}
+
+		char type[100];
+		string tmp;
+		strcpy(tmp.text, t[i].text);
+		get_extension(tmp, type);
+		sprintf(append(responsee),"<td align = \"center\">%s</td>", type);
+
+		char perm[] = "rwxrwxrwx";
+		mode_t mask;
+	
+			
+		if((st.st_mode & S_IRUSR) != S_IRUSR)	perm[0] = '-';
+		if((st.st_mode & S_IWUSR) != S_IWUSR)	perm[1] = '-';
+		if((st.st_mode & S_IXUSR) != S_IXUSR)	perm[2] = '-';
+		if((st.st_mode & S_IRGRP) != S_IRGRP)	perm[3] = '-';
+		if((st.st_mode & S_IWGRP) != S_IWGRP)	perm[4] = '-';
+		if((st.st_mode & S_IXGRP) != S_IXGRP)	perm[5] = '-';
+		if((st.st_mode & S_IROTH) != S_IROTH)	perm[6] = '-';
+		if((st.st_mode & S_IWOTH) != S_IWOTH)	perm[7] = '-';
+		if((st.st_mode & S_IXOTH) != S_IXOTH)	perm[8] = '-';
+
+		sprintf(append(responsee),"<td align = \"center\">%s</td>",perm);
+
+		sprintf(append(responsee),"<td align = \"center\">%s</td>",ctime(&st.st_mtime));
+
+
+		sprintf(append(responsee),"</tr>");
+
+	}
+
+	sprintf(append(responsee),"</table></body></html>");
+	strcat(responsee,"\n\n*******\n\n");
+	strcat(responsee,uri);
+	strcat(responsee,"\n\n*******\n\n");
+
+	send(connfd,responsee, strlen(responsee), 0);
+}
+
+
 void download(pool *p,int i)
 {
     size_t count;

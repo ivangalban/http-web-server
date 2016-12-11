@@ -59,3 +59,4 @@ void build1(string, struct stat *);
 void build2(string, string, struct stat *, struct stat *);
 void add_download(int, pool *, char *, long long, int);
 void server_error(int, char *, char *, char *, char *);
+void html_content(char [], int, int, int);
