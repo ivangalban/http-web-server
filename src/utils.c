@@ -71,3 +71,19 @@ int open_listenfd(int port)
     return listenfd;
 }
 /* $end open_listenfd */
+
+
+void unix_error(char *msg) /* unix-style error */
+{
+    fprintf(stderr, "%s: %s\n", msg, strerror(errno));
+    exit(0);
+}
+
+int Select(int  n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) 
+{
+    int rc;
+
+    if ((rc = select(n, readfds, writefds, exceptfds, timeout)) < 0)
+	   unix_error("Select error");
+    return rc;
+}

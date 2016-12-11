@@ -54,7 +54,17 @@ int main(int argc, char **argv)
 		exit(0);
     }
 
-    init_pool(listenfd, &pool); 
+    init_pool(listenfd, &pool);
+
+    while (1) 
+    {
+		
+		pool.read_ready_set = pool.read_set;
+		
+		pool.nready = Select(pool.maxfd+1, &pool.read_ready_set, NULL, NULL, &ttime);
+		
+		
+    }
 
 	return 0;
 }
