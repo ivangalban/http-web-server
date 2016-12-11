@@ -119,6 +119,32 @@ void translate(char uri[])
 }
 
 
+int cmp_size (string a, string b)
+{
+	int chbk = check_back(a, b);
+	if(chbk != 0)
+		return chbk;
+
+	struct stat stA, stB;
+	build2(a, b, &stA, &stB);
+
+	if((stA.st_mode & S_IFMT) == S_IFDIR && 
+		(stB.st_mode & S_IFMT) == S_IFDIR )
+		return strcmp(a.text, b.text) * Order;
+
+	if((stA.st_mode & S_IFMT) == S_IFDIR)
+		return -1;
+
+	if((stB.st_mode & S_IFMT) == S_IFDIR)
+		return 1;
+
+    if ( stA.st_size == stB.st_size )
+		return strcmp(a.text, b.text) * Order;
+
+	return (stA.st_size - stB.st_size) * Order;
+}
+
+
 int cmp_type (string a, string b)
 {	
 	int chbk = check_back(a, b);
