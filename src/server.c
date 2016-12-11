@@ -24,6 +24,35 @@ void init_pool(int listenfd, pool *p)
 	}
 }
 
+void add_client(int connfd, pool *p) 
+{
+    int i;
+    p->nready--;
+
+    for (i = 0; i < FD_SETSIZE; i++)  
+	{	
+		if (p->clientfd[i] < 0) 
+		{ 
+		   
+		    p->clientfd[i] = connfd;                 
+
+		    
+		    FD_SET(connfd, &p->read_set); 
+
+		    
+		    if (connfd > p->maxfd) 
+				p->maxfd = connfd; 
+		    
+		    if (i > p->maxi)       
+				p->maxi = i;      
+		    
+		    break;
+		}
+    }
+    if (i == FD_SETSIZE) 
+		unix_error("add_client error: Too many clients");
+}
+
 
 int main(int argc, char **argv)
 {
@@ -60,9 +89,13 @@ int main(int argc, char **argv)
     {
 		
 		pool.read_ready_set = pool.read_set;
-		
 		pool.nready = Select(pool.maxfd+1, &pool.read_ready_set, NULL, NULL, &ttime);
 		
+		if (FD_ISSET(listenfd, &pool.read_ready_set))  
+		{
+			connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen); 
+		    add_client(connfd, &pool); 
+		}
 		
     }
 

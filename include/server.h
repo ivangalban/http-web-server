@@ -20,3 +20,4 @@ typedef struct
 
 
 void init_pool(int listenfd, pool *p);
+void add_client(int, pool *);
