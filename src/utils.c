@@ -27,7 +27,6 @@
 typedef struct sockaddr SA;
 typedef unsigned long long ull;
 
-
 /* $end open_client_read_fd */
 
 /*  
@@ -35,8 +34,7 @@ typedef unsigned long long ull;
  *     Returns -1 and sets errno on Unix error.
  */
 /* $begin open_listenfd */
-int open_listenfd(int port)
-{
+int open_listenfd(int port){
     int listenfd, optval = 1;
     struct sockaddr_in serveraddr;
   
@@ -55,6 +53,7 @@ int open_listenfd(int port)
     serveraddr.sin_family = AF_INET; 
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY); 
     serveraddr.sin_port = htons((unsigned short)port); 
+    
     if (bind(listenfd, (SA *)&serveraddr, sizeof(serveraddr)) < 0)
 		return -1;
 
@@ -65,27 +64,21 @@ int open_listenfd(int port)
 }
 /* $end open_listenfd */
 
-
-void unix_error(char *msg) /* unix-style error */
-{
+void unix_error(char *msg){/* unix-style error */
     fprintf(stderr, "%s: %s\n", msg, strerror(errno));
     exit(0);
 }
 
-int Select(int  n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) 
-{
+int Select(int  n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout){
     int rc;
-
     if ((rc = select(n, readfds, writefds, exceptfds, timeout)) < 0)
 	   unix_error("Select error");
     return rc;
 }
 
-int Accept(int s, struct sockaddr *addr, socklen_t *addrlen) 
-{
+int Accept(int s, struct sockaddr *addr, socklen_t *addrlen){
     int rc;
-
     if ((rc = accept(s, addr, addrlen)) < 0)
-	unix_error("Accept error");
+		unix_error("Accept error");
     return rc;
 }

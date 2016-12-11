@@ -5,38 +5,41 @@
 #define DOWNLOAD_BUFFER 8192
 #define append(t) (t)+(strlen(t)) 
 
-typedef struct 
-{ 
-    int maxfd;        
+typedef struct {
 
-    fd_set read_set;  
-    fd_set read_ready_set; 
-
-    int nready;        
-    int maxi;         
+    int maxfd;
+    int nready;
+    int maxi;
     int clientfd[FD_SETSIZE];
     int open_writer_fds[FD_SETSIZE];
+
+    fd_set read_set;
+    fd_set read_ready_set;
    
    	ull ssize[FD_SETSIZE];
     off_t off_set[FD_SETSIZE];
-    	
+
 } pool;
 
 
 typedef struct{
 
 	char *name;
-	int size_byte;
 	char *type;
 	char *lst_mdf;
+
+	int size_byte;
 	int end;
 	int dir;
+
 	time_t date;
 
 }cfile;
 
 typedef struct{
+
     char text[100];
+    
 }string;
 
 enum {NAME, SIZE, TYPE, DATE};
