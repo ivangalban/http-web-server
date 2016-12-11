@@ -119,6 +119,42 @@ void translate(char uri[])
 }
 
 
+int get_extension(string a, char *type)
+{
+	struct stat st;	
+	build1(a, &st);
+
+	if((st.st_mode & S_IFMT) == S_IFDIR)
+	{
+		strcpy(type, "dir");
+		return 0;			
+	}
+
+	char nametmp[100];
+	strcpy(nametmp, a.text);
+	int len_name = strlen(nametmp);
+
+	int pos = len_name - 1;
+	while(nametmp[pos] != '.'){
+		--pos;
+		if(pos < 0)
+			break;
+	}
+
+	if(pos < 0)
+	{
+		strcpy(type, "unknown");
+		return 0;
+	}
+
+	int ind;
+	for( ind = pos; ind < len_name; ++ind)
+		type[ind-pos] = nametmp[ind];
+	type[ind-pos] = 0;
+
+	return 0;
+}
+
 int check_back(string a, string b)
 {
 	if(strcmp(a.text, ".") == 0)
