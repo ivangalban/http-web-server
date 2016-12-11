@@ -24,3 +24,8 @@
 
 typedef struct sockaddr SA;
 typedef unsigned long long ull;
+
+
+
+#define MINPORT 0
+#define MAXPORT 65535

@@ -18,6 +18,8 @@ typedef struct
 } pool;
 
 
+char *default_path;
+
 int main(int argc, char **argv)
 {
 	struct timeval ttime;
@@ -29,6 +31,15 @@ int main(int argc, char **argv)
    
     struct sockaddr_in clientaddr;
     static pool pool;
+
+    port = atoi(argv[1]);
+    default_path = argv[2];
+
+    if ((argc != 3) || (opendir(default_path) == NULL) || (port < MINPORT) || (port > MAXPORT))
+    {
+		fprintf(stderr, "mounting error\n");
+		exit(0);
+    }
 
 	return 0;
 }
