@@ -1,24 +1,29 @@
 #include "../include/utils.h"
-
-typedef struct 
-{ 
-    int maxfd;        
-
-    fd_set read_set;  
-    fd_set read_ready_set; 
-
-    int nready;        
-    int maxi;         
-
-    int clientfd[FD_SETSIZE];    
-   
-   	ull ssize[FD_SETSIZE];
-    off_t off_set[FD_SETSIZE];
-   	int open_writer_fds[FD_SETSIZE];
-} pool;
-
+#include "../include/server.h"
 
 char *default_path;
+
+
+
+void init_pool(int listenfd, pool *p)
+{
+  
+    int i;
+    p->maxi = -1;                  
+    for (i = 0; i < FD_SETSIZE; i++)  
+	{
+		p->off_set[i] = 0;
+		p->ssize[i] = 0;
+		p->open_writer_fds[i] = -1;
+		p->clientfd[i] = -1;        
+    
+	    p->maxfd = listenfd;            
+   
+	    FD_ZERO(&p->read_set);
+	    FD_SET(listenfd, &p->read_set); 
+	}
+}
+
 
 int main(int argc, char **argv)
 {
@@ -48,6 +53,8 @@ int main(int argc, char **argv)
     	fprintf(stderr, "mounting error\n");
 		exit(0);
     }
+
+    init_pool(listenfd, &pool); 
 
 	return 0;
 }
