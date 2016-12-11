@@ -89,6 +89,35 @@ void download(pool *p,int i)
 }
 
 
+char query[100];
+int Order = 1;
+void translate(char uri[])
+{
+	int j=0;
+	int sz = strlen(uri);
+
+	for (int i = 0; i < sz; ++i)
+	{
+		if(uri[i]=='%' && uri[i+1] == '2' && uri[i+2] == '0')
+		{
+			uri[j]=((char)(uri[i+1]-'0')*16+(uri[i+2]-'0'));
+			i+=2;
+		}
+		else if(uri[i] == '?')
+		{
+			Order *= -1;
+			strcpy(query, uri+i+3);
+			break;
+		}
+		else
+		{
+			uri[j]=uri[i];
+		}
+		j++;
+	}
+	uri[j]=0;
+}
+
 void response(char request[], int connfd, pool *p, int index)
 {
 	struct stat sb;
