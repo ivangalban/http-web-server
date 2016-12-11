@@ -44,3 +44,5 @@ void download(pool *, int);
 void error_msg(const char *, int);
 void response(char [], int, pool *, int);
 void translate(char []);
+int cmp_type (string, string);
+int cmp_name (string, string);

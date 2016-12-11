@@ -119,23 +119,6 @@ void translate(char uri[])
 }
 
 
-typedef struct{
-
-	char *name;
-	int size_byte;
-	char *type;
-	char *lst_mdf;
-	int end;
-	int dir;
-	time_t date;
-
-}cfile;
-
-enum {NAME, SIZE, TYPE, DATE};
-
-
-
-
 int cmp_type (string a, string b)
 {	
 	int chbk = check_back(a, b);
@@ -151,6 +134,15 @@ int cmp_type (string a, string b)
     if(!val)
     	return strcmp(a.text, b.text) * Order;
     return val * Order;
+}
+
+int cmp_name (string a, string b)
+{
+	int chbk = check_back(a, b);
+	if(chbk != 0)
+		return chbk;
+
+    return strcmp(a.text, b.text) * Order;
 }
 
 
