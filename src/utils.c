@@ -87,3 +87,12 @@ int Select(int  n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct 
 	   unix_error("Select error");
     return rc;
 }
+
+int Accept(int s, struct sockaddr *addr, socklen_t *addrlen) 
+{
+    int rc;
+
+    if ((rc = accept(s, addr, addrlen)) < 0)
+	unix_error("Accept error");
+    return rc;
+}
