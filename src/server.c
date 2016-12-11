@@ -119,6 +119,28 @@ void translate(char uri[])
 }
 
 
+char global_path_name[MAXLINE];
+
+
+void build1(string a, struct stat *st)
+{
+	char path[MAXLINE];
+	strcpy(path, global_path_name);
+
+	if(path[strlen(path)] != '/')
+		strcat(path, "/");
+
+	strcat(path, a.text);
+
+	stat(path, st);
+}
+
+void build2(string a, string b, struct stat *stA, struct stat *stB)
+{
+	build1(a, stA);
+	build1(b, stB);
+}
+
 int get_extension(string a, char *type)
 {
 	struct stat st;	
