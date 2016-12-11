@@ -4,6 +4,18 @@
 char *default_path;
 
 
+void server_error(int connfd, char *num, char *msg, char *cause, char *text)
+{
+    char buf[MAXLINE];
+
+    sprintf(buf, "HTTP/1.1 %s %s\r\nContent-type: text/html\r\n",num, msg);
+    
+    sprintf(buf, "<html><title>Error</title>\r\n<body>%s: %s\r\n<hr/><p>%s: %s</p></body></html>\r\n",num, msg, text, cause);
+
+    send(connfd,buf, strlen(buf), 0);
+    return;
+}
+
 void error_msg(const char* msg, int halt_flag) {
     perror(msg);
     if (halt_flag) exit(-1); 
