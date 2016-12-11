@@ -135,6 +135,25 @@ enum {NAME, SIZE, TYPE, DATE};
 
 
 
+
+int cmp_type (string a, string b)
+{	
+	int chbk = check_back(a, b);
+	if(chbk != 0)
+		return chbk;
+
+	char typeA[100], typeB[100];
+	get_extension(a, typeA);
+	get_extension(b, typeB);
+
+    int val = strcmp(typeA, typeB);
+
+    if(!val)
+    	return strcmp(a.text, b.text) * Order;
+    return val * Order;
+}
+
+
 void response(char request[], int connfd, pool *p, int index)
 {
 	struct stat sb;
