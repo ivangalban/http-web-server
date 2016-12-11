@@ -34,6 +34,10 @@ typedef struct{
 
 }cfile;
 
+typedef struct{
+    char text[100];
+}string;
+
 enum {NAME, SIZE, TYPE, DATE};
 
 
