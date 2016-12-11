@@ -27,11 +27,6 @@ typedef unsigned long long ull;
 
 
 
-#define MINPORT 0
-#define MAXPORT 65535
-
-
-
 #define LISTENQ  1024  /* second argument to listen() */
 
 

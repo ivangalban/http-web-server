@@ -1,4 +1,8 @@
 
+#define MINPORT 0
+#define MAXPORT 65535
+#define	MAXLINE	 8192  /* max text line length */
+
 
 typedef struct 
 { 
@@ -21,3 +25,4 @@ typedef struct
 
 void init_pool(int listenfd, pool *p);
 void add_client(int, pool *);
+void check_clients(pool *);

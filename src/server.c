@@ -54,6 +54,39 @@ void add_client(int connfd, pool *p)
 }
 
 
+void check_clients(pool *p) 
+{
+	 
+    int i, connfd, n;
+	char buf[MAXLINE];
+   	char *response_buf;
+
+    for (i = 0; (i <= p->maxi) && (p->nready > 0); i++) 
+    {
+		
+		connfd = p->clientfd[i];
+		if ((connfd > 0) && (FD_ISSET(connfd, &p->read_ready_set))) 
+		{ 
+			p->nready--;
+		
+		    int bytes_read = recv(connfd, buf, sizeof(buf), 0); 
+			if (bytes_read < 0) error_msg("Problem with recv call", 0);
+
+
+			response(buf, connfd, p, i);
+			
+			break;
+		}
+	}
+
+	for (int i = 0; i<= p->maxi; ++i)
+		if(p->open_writer_fds[i] != -1)
+			download(p,i);
+
+	return;
+}
+
+
 int main(int argc, char **argv)
 {
 	struct timeval ttime;
@@ -97,6 +130,7 @@ int main(int argc, char **argv)
 		    add_client(connfd, &pool); 
 		}
 		
+		check_clients(&pool);
     }
 
 	return 0;
