@@ -1,18 +1,17 @@
-Orientacion del Proyecto
-========================
+# Orientacion del Proyecto
 
 El objetivo del proyecto es hacer un pequeño servidor web que permita listar directorios y archivos en una computadora.
 
 Las funcionalidades son las siguientes:
 
-1. al ejecutar el programa deben pasarle 2 parámetros, el puerto por donde va a escuchar (1) y el directorio raíz de donde se va a mostrar información (2). 
+1. Al ejecutar el programa deben pasarle 2 parámetros, el puerto por donde va a escuchar (1) y el directorio raíz de donde se va a mostrar información (2).
 
-~~~bash
+```bash
 $ gcc webserver.c -o server
 $ ./server 4000 /home/pqr/
 Listening in port 4000
 Serving directory "/home/pqr"
-~~~
+```
 
 2. Debe velar en todo momento que los clientes no puedan listar ninguna información que se encuentre fuera del directorio raiz que se especifica en la entrada.
 
@@ -26,32 +25,30 @@ Serving directory "/home/pqr"
 
 7. El cliente en el navegador debe ser capaz de descargar un archivo con solo darle un click.
 
-8. El servidor debe ser capaz de atender correctamente a un cliente y manejar un solo request a la vez.  
+8. El servidor debe ser capaz de atender correctamente a un cliente y manejar un solo request a la vez.
 
-* NOTA: para leer el contenido de un directorio considere usar las funciones `opendir()` y `readdir()`
+9. Mostrar información adicional de los archivos además del nombre (fecha de modificación, tamaño, permisos, etc.)
 
-y hasta aqui tienen 3 puntos en el proyecto
+- esta funcionalidad incluye la posibilidad de ordenar por cada uno de esos parámetros (nombre, fecha, tamaño, etc.)
 
-9. Mostrar información adicional de los archivos además del nombre (fecha de modificación, tamaño, permisos, etc.) [1pt] 
+10. Soportar multiples conexiones
 
-* esta funcionalidad incluye la posibilidad de ordenar por cada uno de esos parámetros (nombre, fecha, tamaño, etc.)
+- esta funcionalidad adicional debe permitir que el cliente pueda estar atendiendo varios clientes simultáneamente
 
-10. Soportar multiples conexiones  (2pt)
+- esta funcionalidad debe permitir que un cliente pueda empezar a descargar un archivo (grande) en el navegador y que el navegador no se bloquee y permita seguir navegando y dando clicks en otros directorios.
 
-* esta funcionalidad adicional debe permitir que el cliente pueda estar atendiendo varios clientes simultáneamente
+- eventualmente se debe poder estar descargando varios archivos a la misma vez.
 
-* esta funcionalidad debe permitir que un cliente pueda empezar a descargar un archivo (grande) en el navegador y que el navegador no se bloquee y permita seguir navegando y dando clicks en otros directorios.
+## Colaboraciones
 
-* eventualmente se debe poder estar descargando varios archivos a la misma vez. 
+Cree un `issue` o envíe un `pull request`
 
-* NOTA: si hay mas de un archivo descargandose a la vez, debe velar porque ambos archivos *"se descarguen simultáneamente"*. Si uno de los 2 archivos termina antes de empezar el otro, no se considera terminada esta funcionalidad y obtienen solo 1pt en vez de 2pts.
+## Autores
 
-* NOTA: para esta funcionalidad considere usar la función `select()`.
+Iván Galbán Smith <ivan.galban.smith@gmail.com>
 
-* NOTA: puede hacer uso tambien de funciones como `sendfile()` 
+Raydel E. Alonso Baryolo <raydelalonsobaryolo@gmail.com>
 
-* NOTA: esta funcionalidad se puede hacer sin `select()` usando multiples procesos (`fork()`). si no utilizan select, solo obtienen 1pt en vez de 2pts.
+3rd year of Computer Science
 
-El proyecto se hará en un repositorio de git que esta en 
-[http://gitlab.matcom.uh.cu/pm2/webserver.git]
-
+University of Havana, 2015
