@@ -39,6 +39,11 @@ Serving directory "/home/pqr"
 
 - eventualmente se debe poder estar descargando varios archivos a la misma vez.
 
+Sistema Operativo
+-----------------
+
+Implementado en `Linux`.
+
 ## Colaboraciones
 
 Cree un `issue` o envíe un `pull request`
