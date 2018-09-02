@@ -1,4 +1,4 @@
-# Orientacion del Proyecto
+# Descripción
 
 El objetivo del proyecto es hacer un pequeño servidor web que permita listar directorios y archivos en una computadora.
 
